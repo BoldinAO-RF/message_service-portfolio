@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using MessageService.EF;
+using MessageService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +26,14 @@ namespace MessageService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<MessageContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Portfolio"));
+            });
+
+            services.AddScoped<DbContext, MessageContext>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             services.AddSwaggerGen();
 
