@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MessageService</name>
+    </assembly>
+    <members>
+        <member name="T:MessageService.Controllers.WeatherForecastController">
+            <summary>
+            Test class
+            </summary>
+        </member>
+        <member name="M:MessageService.Controllers.WeatherForecastController.#ctor(Microsoft.Extensions.Logging.ILogger{MessageService.Controllers.WeatherForecastController})">
+            <summary>
+            Test method
+            </summary>
+            <param name="logger"></param>
+        </member>
+    </members>
+</doc>
