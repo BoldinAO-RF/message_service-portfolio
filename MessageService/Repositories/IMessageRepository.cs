@@ -5,9 +5,9 @@ namespace MessageService.Repositories
 {
     public interface IMessageRepository
     {
-        IQueryable<Message> GetAll();
-        Message GetById(int id);
-        void Save(Message message);
+        IQueryable<object> GetAll();
+        void Save(MessageViewModel message);
         void Delete(int id);
+        Message Edit(int id, MessageViewModel message);
     }
 }

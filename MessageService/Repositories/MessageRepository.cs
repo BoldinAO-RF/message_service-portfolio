@@ -1,9 +1,6 @@
 ﻿using MessageService.Contract;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MessageService.Repositories
 {
@@ -18,22 +15,48 @@ namespace MessageService.Repositories
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _context.Set<Message>().Remove(GetMessageById(id));
+            _context.SaveChanges();
         }
 
-        public IQueryable<Message> GetAll()
+        private Message GetMessageById(int id)
         {
-            return _context.Set<Message>().AsNoTracking();
+            return _context.Set<Message>().AsNoTracking().Single(m => m.Id == id);
         }
 
-        public Message GetById(int id)
+        public Message Edit(int id, MessageViewModel message)
         {
-            throw new NotImplementedException();
+            var m = new Message()
+            {
+                Id = id,
+                MessageText = message.MessageText,
+                UserId = message.UserId
+            };
+
+            _context.Entry(m).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return m;
         }
 
-        public void Save(Message message)
+        public IQueryable<object> GetAll()
         {
-            throw new NotImplementedException();
+            return from message in _context.Set<Message>().AsNoTracking()
+                   join u in _context.Set<User>().AsNoTracking() on message.UserId equals u.Id
+                   select new
+                   {
+                       MessageText = message.MessageText,
+                       UserFullName = u.FullName
+                   };
+        }
+
+        public void Save(MessageViewModel message)
+        {
+            _context.Set<Message>().Add(new Message() { 
+                MessageText = message.MessageText,
+                UserId = message.UserId
+            });
+            _context.SaveChanges();
         }
     }
 }

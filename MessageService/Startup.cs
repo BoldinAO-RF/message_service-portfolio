@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using FluentValidation;
+using MessageService.Contract;
 using MessageService.EF;
 using MessageService.Repositories;
+using MessageService.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +37,8 @@ namespace MessageService
 
             services.AddScoped<DbContext, MessageContext>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IValidator<MessageViewModel>, MessageValidator>();
 
             services.AddSwaggerGen();
 
@@ -62,6 +67,10 @@ namespace MessageService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.WithOrigins("*")
+                              .AllowAnyMethod()
+                              .AllowAnyHeader());
 
             app.UseSwagger();
 

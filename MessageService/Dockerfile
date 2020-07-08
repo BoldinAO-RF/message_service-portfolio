@@ -16,7 +16,12 @@ RUN dotnet build "MessageService.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "MessageService.csproj" -c Release -o /app/publish
 
+
+RUN sudo echo "America/New_York" > /etc/timezone
+RUN sudo dpkg-reconfigure -f noninteractive tzdata
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "MessageService.dll"]
